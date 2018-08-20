@@ -1,0 +1,7 @@
+{% if track_items %}
+<ul>
+	{% for track in track_items %}
+		<li>{{ track.track.name }} </li>
+	{% endfor %}
+</ul>
+{% endif %}
