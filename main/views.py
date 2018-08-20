@@ -4,22 +4,24 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
+import django.contrib.auth
 import urllib
 import requests
 import base64
 
 from .models import User
+from friendship.models import Friend
 
 @login_required(login_url='/login')
 def index(request):
-	if not request.user.is_authenticated:
-		return HttpResponse('Not logged in.')
-
-	return HttpResponse('%s' % (request.user))
+	friends = Friend.objects.friends(request.user)
+	print(friends)
+	c = {'asdf': friends}
+	return render(request, 'main/index.html', c)
 
 def login_(request):
 	context = {}
-	return render(request, 'main/login.html', context)
+	return render(request, 'main/cover.html', context)
 
 def spotifylogin(request):
 	url = 'https://accounts.spotify.com/authorize'
@@ -117,3 +119,6 @@ def commontracks(request, friend_username):
 	common_track_items = _find_common_track_items(user_track_items, friend_track_items)
 	return render(request, 'main/tracks.html', {'track_items': common_track_items})
 
+def logout(request):
+	django.contrib.auth.logout(request)
+	return redirect('/')
