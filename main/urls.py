@@ -9,5 +9,6 @@ urlpatterns = [
     path('spotifycallback', views.spotifycallback),
     path('tracks', views.tracks),
     path('commontracks/<str:friend_username>', views.commontracks),
-    path('logout', views.logout)
+    path('logout', views.logout),
+    path('refresh_token/<str:username>', views.refresh_token)
 ]
