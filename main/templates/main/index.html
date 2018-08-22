@@ -142,6 +142,7 @@ function showCommonTracks(username) {
 function getTrackItems(username, callback) {
     if (username in tracks) {
         callback()
+        return
     }
 
     request_url = 'https://api.spotify.com/v1/me/tracks'
