@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
-import django-heroku
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -135,3 +135,8 @@ SPOTIFY_REDIRECT_URI = 'http://localhost:8000/spotifycallback'
 SPOTIFY_SCOPE = 'user-read-private user-read-email user-library-read user-follow-read'
 
 django_heroku.settings(locals())
+
+# Heroku: Update database configuration from $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
