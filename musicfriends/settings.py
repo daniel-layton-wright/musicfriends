@@ -123,7 +123,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'main/static')
+    os.path.join(BASE_DIR, 'main/static'),
 )
 
 AUTH_USER_MODEL = 'main.User'
@@ -131,7 +131,7 @@ LOGIN_URL = '/login'
 
 SPOTIFY_CLIENT_ID = 'ef193af183eb4605bb960861f62d7fdd'
 SPOTIFY_CLIENT_SECRET = 'fadae9ff124343ea928b12f0e16a4308'
-SPOTIFY_REDIRECT_URI = 'http://localhost:8000/spotifycallback'
+SPOTIFY_REDIRECT_URI = 'http://musicfriends.herokuapp.com/spotifycallback'
 SPOTIFY_SCOPE = 'user-read-private user-read-email user-library-read user-follow-read'
 
 django_heroku.settings(locals())
