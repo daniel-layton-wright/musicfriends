@@ -91,6 +91,7 @@ def refresh_token(request, username):
     access_token = _refresh_token(username)
     return JsonResponse({"access_token": access_token})
 
+
 def _refresh_token(username):
     user = User.objects.get(pk=username)
     url = 'https://accounts.spotify.com/api/token'
@@ -112,6 +113,7 @@ def _refresh_token(username):
     user.spotify_access_token = access_token
     user.save()
     return access_token
+
 
 def _get_tracks(access_token):
     request_url = 'https://api.spotify.com/v1/me/tracks'
@@ -175,6 +177,7 @@ def friend_request(request, username):
     except:
         return HttpResponseBadRequest('Error.')
 
+
 @login_required
 def spotify_user_lookup(request, username):
     url = 'https://api.spotify.com/v1/users/%s' % (username)
@@ -189,6 +192,7 @@ def _spotify_get_request(user, url):
     response = requests.get(url, headers = {'Authorization': 'Bearer ' + user.spotify_access_token})
     if response.status_code == 401:
         _refresh_token(user.username)
+        user.refresh_from_db()
         response = requests.get(url, headers={'Authorization': 'Bearer ' + user.spotify_access_token})
 
     if response.status_code == 502:
@@ -215,12 +219,14 @@ def _get_friends_and_requests(user):
         'requests_from': requests_from
     }
 
+
 @login_required
 def accept_request(request, username):
     from_user = User.objects.get(pk = username)
     request = FriendshipRequest.objects.get(from_user = from_user, to_user = request.user)
     request.accept()
     return HttpResponse()
+
 
 @login_required
 def reject_request(request, username):
@@ -229,9 +235,10 @@ def reject_request(request, username):
     request.delete()
     return HttpResponse()
 
+
 @login_required
 def get_tracks(request, username, page):
-    other_user = User.objects.get(pk = username)
+    other_user = User.objects.get(pk=username)
     if username != request.user.username and not Friend.objects.are_friends(request.user, other_user):
         return HttpResponseBadRequest('Not friends.')
 
